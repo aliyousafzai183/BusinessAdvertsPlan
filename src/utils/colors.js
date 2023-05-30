@@ -9,7 +9,8 @@ const colors = {
     width: width,
     linear1: '#01F8DB',
     linear2: '#0074FD',
-    transparent: 'transparent'
+    transparent: 'transparent',
+    black: 'black'
 }
 
 export default colors;
