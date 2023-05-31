@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ToastAndroid, Modal } from 'react-native';
 import colors from '../../utils/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import RouteName from '../../routes/RouteName';
+import { useNavigation } from '@react-navigation/native';
 
-const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDeletePlan }) => {
+const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDeletePlan, isNew, setAddPlan }) => {
+  const stack = useNavigation();
   const goBack = () => {
     navigation.goBack();
   };
@@ -11,15 +14,30 @@ const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDe
   const handleSave = () => {
     setEditable(false);
     setSave(true);
-  }
+  };
 
   const handleEdit = () => {
     setEditable(true);
-  }
+  };
 
   const handleDelete = () => {
     setDeletePlan(true);
-  }
+  };
+
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const handleDeleteAllPlans = () => {
+    setShowModal(!showModal);
+  };
+
+  const handleAddPlan = () => {
+    setAddPlan(true);
+    stack.navigate(RouteName.VIEW_PLAN_SCREEN);
+  };
 
   return (
     <View style={styles.header}>
@@ -32,23 +50,47 @@ const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDe
 
       {
         navigation ? (
-          editable ?
-            <TouchableOpacity onPress={handleSave}>
-              <Icon name="check" size={24} color={colors.primary} style={styles.icon} />
+          isNew ? (
+            <TouchableOpacity onPress={handleAddPlan}>
+              <Icon name="plus-square" size={24} color={colors.primary} style={styles.icon} />
             </TouchableOpacity>
-            :
-            <View style={styles.rightContainer}>
-              <TouchableOpacity onPress={handleEdit}>
-                <Icon name="edit" size={24} color={colors.primary} style={styles.icon} />
+          ) : (
+            editable ? (
+              <TouchableOpacity onPress={handleSave}>
+                <Icon name="check" size={24} color={colors.primary} style={styles.icon} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleDelete}>
-                <Icon name="trash" size={24} color={colors.primary} style={styles.icon} />
-              </TouchableOpacity>
-            </View>
+            ) : (
+              <View style={styles.rightContainer}>
+                <TouchableOpacity onPress={handleEdit}>
+                  <Icon name="edit" size={24} color={colors.primary} style={styles.icon} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleDelete}>
+                  <Icon name="trash" size={24} color={colors.primary} style={styles.icon} />
+                </TouchableOpacity>
+              </View>
+            )
+          )
         ) : (
-          <Icon name={icon} size={24} color={colors.primary} style={styles.icon} />
+          <TouchableOpacity onPress={toggleModal}>
+            <Icon name={icon} size={24} color={colors.primary} style={styles.icon} />
+          </TouchableOpacity>
         )
       }
+
+
+
+      <Modal visible={showModal} animationType="slide" transparent={true}>
+        <TouchableOpacity style={styles.modalContainer} onPress={toggleModal}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity style={styles.modalItem} onPress={handleAddPlan}>
+              <Text style={styles.modalItemText}>Add New Plan</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalItem1} onPress={handleDeleteAllPlans}>
+              <Text style={styles.modalItemText}>Delete All Plans</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </View>
   );
 };
@@ -72,10 +114,42 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.primary,
   },
-
-  rightContainer:{
-    flexDirection:'row',
-    justifyContent:'center',
-    alignItems:'center'
-  }
+  rightContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  modalContent: {
+    backgroundColor: colors.linear2,
+    width: colors.width * 0.4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: colors.height * 0.15,
+    right: colors.width * 0.14,
+    top: colors.height * 0.048,
+    position: 'absolute',
+    borderRadius: colors.height * 0.02
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0
+  },
+  modalItem: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.primary,
+  },
+  modalItem1: {
+    paddingVertical: 10,
+  },
+  modalItemText: {
+    fontSize: 16,
+    color: colors.primary,
+  },
 });

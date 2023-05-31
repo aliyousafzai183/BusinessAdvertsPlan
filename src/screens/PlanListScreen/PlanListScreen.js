@@ -19,7 +19,7 @@ const PlanListScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Header icon="list" title="Plans List" />
+        <Header icon="list" title="All Ad Plans"/>
         <View style={styles.cardsContainer}>
           {data.map((plan, index) => (
             <ListCard plan={plan} index={index} key={plan.id} navigation={navigation} />

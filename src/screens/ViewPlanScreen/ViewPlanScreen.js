@@ -8,7 +8,7 @@ import RouteName from '../../routes/RouteName';
 
 const ViewPlanScreen = ({ navigation }) => {
   const route = useRoute();
-  const { id } = route.params;
+  const { id } = route.params ?? {};
 
   const [save, setSave] = useState(false);
   const [editable, setEditable] = useState(false);
@@ -18,9 +18,10 @@ const ViewPlanScreen = ({ navigation }) => {
   const [clicks, setClicks] = useState('');
   const [impressions, setImpressions] = useState('');
   const [planId, setPlanId] = useState('');
+  const [addPlan, setAddPlan] = useState(false);
 
   const data = [
-    { id: 1, name: '', expenditure: 500, clicks: 200, impressions: 1000 },
+    { id: 1, name: 'Plan 1', expenditure: 500, clicks: 200, impressions: 1000 },
     { id: 2, name: 'Plan 2', expenditure: 750, clicks: 300, impressions: 1500 },
     { id: 3, name: 'Plan 3', expenditure: 1000, clicks: 400, impressions: 2000 },
     { id: 4, name: 'Plan 4', expenditure: 1000, clicks: 400, impressions: 2000 },
@@ -39,7 +40,7 @@ const ViewPlanScreen = ({ navigation }) => {
       setPlanId(plan.id.toString());
     }
 
-    if(deletePlan){
+    if (deletePlan) {
       // handleDeletePlan
       ToastAndroid.show('Plan Deleted', ToastAndroid.SHORT);
       navigation.navigate(RouteName.PLAN_LIST_SCREEN);
@@ -49,49 +50,87 @@ const ViewPlanScreen = ({ navigation }) => {
       handleSave();
     }
 
-  }, [id, data, save, deletePlan]);
+  }, [id, deletePlan]);
 
   const handleSave = () => {
     ToastAndroid.show("Plan Saved", ToastAndroid.SHORT);
     // navigation.navigate(RouteName.PLAN_LIST_SCREEN);
   };
 
+  const handleAdd = () => {
+    ToastAndroid.show("Plan Saved", ToastAndroid.SHORT);
+    navigation.navigate(RouteName.PLAN_LIST_SCREEN);
+  };
+
   const handleKeyboardDone = () => {
     Keyboard.dismiss();
   };
 
-  const renderTextInput = (label, value, placeholder, setValue, type) => (
-    <View style={styles.inputContainer}>
-      {value ? <Text style={styles.label}>{label}</Text> : null}
-      <TextInput
-        style={styles.textInput}
-        value={value}
-        onChangeText={setValue}
-        placeholder={placeholder}
-        placeholderTextColor={colors.primary}
-        keyboardType={type}
-        returnKeyType="done"
-        onSubmitEditing={handleKeyboardDone}
-        editable={editable}
-      />
-    </View>
-  );
-
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
-      <Header title="Edit Plan" navigation={navigation} setSave={setSave} save={save} editable={editable} setEditable={setEditable} setDeletePlan={setDeletePlan}/>
+      <Header title={id ? "Edit Plan" : "Add Plan"} navigation={navigation} setSave={setSave} save={save} editable={editable} setEditable={setEditable} setDeletePlan={setDeletePlan} isNew={id ? false : true} setAddPlan={setAddPlan}/>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
 
-        {id ? (
-          <View>
-            {renderTextInput('Plan Name', planName, 'Enter plan name', setPlanName, "default")}
-            {renderTextInput('Expenditure', expenditure, 'Enter expenditure', setExpenditure, "numeric")}
-            {renderTextInput('Clicks', clicks, 'Enter clicks', setClicks, "numeric")}
-            {renderTextInput('Impressions', impressions, 'Enter impressions', setImpressions, "numeric")}
-          </View>
-        ) : (
-          <Text>No data found</Text>
-        )}
+        <View style={styles.inputContainer}>
+          {planName ? <Text style={styles.label}>Enter plan name</Text> : null}
+          <TextInput
+            style={styles.textInput}
+            value={planName}
+            onChangeText={setPlanName}
+            placeholder="Plan name here"
+            placeholderTextColor={colors.primary}
+            keyboardType="default"
+            returnKeyType="done"
+            onSubmitEditing={handleKeyboardDone}
+            editable={editable}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          {planName ? <Text style={styles.label}>Enter ad expenditure</Text> : null}
+          <TextInput
+            style={styles.textInput}
+            value={expenditure}
+            onChangeText={setExpenditure}
+            placeholder="Ad expenditure here"
+            placeholderTextColor={colors.primary}
+            keyboardType="numeric"
+            returnKeyType="done"
+            onSubmitEditing={handleKeyboardDone}
+            editable={editable}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          {planName ? <Text style={styles.label}>Enter ad clicks</Text> : null}
+          <TextInput
+            style={styles.textInput}
+            value={clicks}
+            onChangeText={setClicks}
+            placeholder="Ad clicks here"
+            placeholderTextColor={colors.primary}
+            keyboardType="numeric"
+            returnKeyType="done"
+            onSubmitEditing={handleKeyboardDone}
+            editable={editable}
+          />
+        </View>
+
+        <View style={styles.inputContainer}>
+          {planName ? <Text style={styles.label}>Enter ad impressions</Text> : null}
+          <TextInput
+            style={styles.textInput}
+            value={impressions}
+            onChangeText={setImpressions}
+            placeholder="Ad impressions here"
+            placeholderTextColor={colors.primary}
+            keyboardType="numeric"
+            returnKeyType="done"
+            onSubmitEditing={handleKeyboardDone}
+            editable={editable}
+          />
+        </View>
+
       </ScrollView>
     </LinearGradient>
   );
@@ -116,7 +155,8 @@ const styles = StyleSheet.create({
   label: {
     color: colors.linear2,
     marginBottom: 5,
-    alignSelf:'center',
+    alignSelf: 'center',
+    fontWeight:'bold'
   },
   textInput: {
     height: colors.height * 0.05,
@@ -142,5 +182,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  noDataContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noDataText: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  addButton: {
+    fontSize: 16,
+    color: colors.primary,
+    textDecorationLine: 'underline',
   },
 });

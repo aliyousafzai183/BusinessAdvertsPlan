@@ -62,7 +62,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Header icon="bar-chart" title="Statistics"/>
+        <Header icon="bar-chart" title="Ads Statistics"/>
         <View style={styles.cardContainer}>
           <HomeCard title="Total Expenditure" value={`$ ${totalExpenditure}`} />
           <HomeCard title="Total Clicks" value={totalClicks} />
