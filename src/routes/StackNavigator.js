@@ -22,7 +22,7 @@ const StackNavigator = () => {
                     name={RouteName.SPLASH_SCREEN}
                     component={SplashScreen}
                     options={{
-                        headerShown: false
+                        headerShown: false,
                     }}
                 />
 
@@ -48,11 +48,14 @@ const StackNavigator = () => {
                     options={{
                         headerShown: false
                     }}
-                />
+                    />
 
                 <Stack.Screen
                     name={RouteName.MAIN_HOME_SCREEN}
                     component={BottomTab}
+                    options={{
+                        headerShown: false
+                    }}
                 />
 
                 <Stack.Screen

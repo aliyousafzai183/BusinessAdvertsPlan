@@ -1,12 +1,29 @@
-import React from 'react';
-import { Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import colors from '../../utils/colors';
 
-const AdBudgetPlanner = () => {
+const ContinueScreen = ({ navigation }) => {
+
   return (
-    <View>
-      <Text>AdBudgetPlanner</Text>
-    </View>
-  )
-}
+    <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
+      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
 
-export default AdBudgetPlanner;
+      </ScrollView>
+    </LinearGradient>
+  );
+};
+
+export default ContinueScreen;
+
+const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
+  container: {
+    // justifyContent: 'center',
+    alignItems: 'center',
+    flexGrow: 1,
+    paddingBottom: 20, // Add padding to ensure the button is not covered by the keyboard
+  },
+});
