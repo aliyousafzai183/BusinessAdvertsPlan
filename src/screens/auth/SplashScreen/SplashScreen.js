@@ -3,6 +3,7 @@ import { Text, StyleSheet, Image, StatusBar } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../../utils/colors';
 import RouteName from '../../../routes/RouteName';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SplashScreen = ({ navigation }) => {
   const [showText, setShowText] = useState(false);
@@ -18,6 +19,16 @@ const SplashScreen = ({ navigation }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  const checkNameProvided = async () => {
+    const nameProvided = await AsyncStorage.getItem('nameProvided');
+
+    if (nameProvided) {
+      navigation.navigate(RouteName.MAIN_HOME_SCREEN);
+    }else{
+      navigation.replace(RouteName.NAME_SCREEN);
+    }
+  };
+
   useEffect(() => {
     let typingTimer;
     let currentIndex = 0;
@@ -31,7 +42,7 @@ const SplashScreen = ({ navigation }) => {
         } else {
           clearInterval(typingTimer);
           setTimeout(() => {
-            navigation.replace(RouteName.NAME_SCREEN);
+            checkNameProvided();
           }, 2000);
         }
       }, 100);

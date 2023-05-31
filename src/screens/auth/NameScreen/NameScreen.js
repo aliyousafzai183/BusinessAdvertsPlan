@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ToastAndroid, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../../utils/colors';
 import RouteName from '../../../routes/RouteName';
@@ -13,11 +14,13 @@ const NameScreen = ({ navigation }) => {
     setName(text);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (name.length < 3) {
       ToastAndroid.show('Name should be at least 3 characters', ToastAndroid.SHORT);
     } else {
-      navigation.navigate(RouteName.BUSINESS_NAME_SCREEN, {name: name});
+      await AsyncStorage.setItem('nameProvided', 'true');
+
+      navigation.navigate(RouteName.BUSINESS_NAME_SCREEN, { name: name });
     }
   };
 
@@ -30,7 +33,7 @@ const NameScreen = ({ navigation }) => {
           <TextInput
             style={[styles.input, nameFocused && styles.inputFocused]}
             placeholder={nameFocused ? '' : 'Your name here'}
-            placeholderTextColor={colors.secondary}
+            placeholderTextColor={colors.primary}
             value={name}
             onChangeText={handleNameChange}
             onFocus={() => setNameFocused(true)}
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flexGrow: 1,
-    paddingBottom: 20, // Add padding to ensure the button is not covered by the keyboard
+    paddingBottom: 20,
   },
   icon: {
     marginBottom: colors.height * 0.05,
@@ -85,9 +88,8 @@ const styles = StyleSheet.create({
     color: colors.primary,
     alignSelf: 'center',
     textAlign: 'center',
-    borderWidth:1
+    borderWidth: 1
   },
-
   inputFocused: {
     borderColor: colors.primary,
     borderWidth: 2,

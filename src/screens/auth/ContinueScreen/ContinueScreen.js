@@ -5,8 +5,11 @@ import colors from '../../../utils/colors';
 import RouteName from '../../../routes/RouteName';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
+import { useRoute } from '@react-navigation/native';
 
 const ContinueScreen = ({ navigation }) => {
+  const route = useRoute();
+  const { name, businessName } = route.params;
   const [isAgreed, setIsAgreed] = useState(false);
 
   const handleAgreementToggle = () => {
@@ -15,7 +18,7 @@ const ContinueScreen = ({ navigation }) => {
 
   const handleNext = () => {
     if (isAgreed) {
-      navigation.navigate(RouteName.MAIN_HOME_SCREEN);
+      navigation.replace(RouteName.MAIN_HOME_SCREEN);
     } else {
       // Show error message or toast indicating that the user needs to agree to the terms
     }
@@ -36,7 +39,7 @@ const ContinueScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Icon1 name={isAgreed? "smileo" : "frowno"} size={colors.width * 0.2} color={colors.primary} style={styles.icon} />
+        <Icon1 name={isAgreed ? "smileo" : "frowno"} size={colors.width * 0.2} color={colors.primary} style={styles.icon} />
         <View style={styles.textContainer}>
           <View style={styles.checkboxContainer}>
             <TouchableOpacity style={styles.checkboxButton} onPress={handleAgreementToggle}>
@@ -53,18 +56,18 @@ const ContinueScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.previousButton} onPress={handlePrevious}>
-              <Text style={styles.buttonText}>Previous</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, !isAgreed && styles.disabledButton]}
-              onPress={handleNext}
-              disabled={!isAgreed}
-            >
-              <Text style={styles.buttonText}>Finish</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.previousButton} onPress={handlePrevious}>
+            <Text style={styles.buttonText}>Previous</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, !isAgreed && styles.disabledButton]}
+            onPress={handleNext}
+            disabled={!isAgreed}
+          >
+            <Text style={styles.buttonText}>Finish</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </LinearGradient>
   );
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: colors.height * 0.1,
-    width:'100%'
+    width: '100%'
   },
   button: {
     width: colors.width * 0.25,

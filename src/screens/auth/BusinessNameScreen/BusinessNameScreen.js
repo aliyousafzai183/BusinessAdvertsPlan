@@ -4,8 +4,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../../utils/colors';
 import RouteName from '../../../routes/RouteName';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useRoute } from '@react-navigation/native';
 
 const BusinessNameScreen = ({ navigation }) => {
+  const route = useRoute();
+  const { name } = route.params;
   const [businessName, setBusinessName] = useState('');
   const [businessNameFocused, setBusinessNameFocused] = useState(false);
 
@@ -17,7 +20,7 @@ const BusinessNameScreen = ({ navigation }) => {
     if (businessName.length < 3) {
       ToastAndroid.show('Business name should be at least 3 characters', ToastAndroid.SHORT);
     } else {
-      navigation.navigate(RouteName.CONTINUE_SCREEN, { businessName: businessName });
+      navigation.navigate(RouteName.CONTINUE_SCREEN, { businessName: businessName, name: name });
     }
   };
 
@@ -34,7 +37,7 @@ const BusinessNameScreen = ({ navigation }) => {
           <TextInput
             style={[styles.input, businessNameFocused && styles.inputFocused]}
             placeholder={businessNameFocused ? '' : 'Business name here'}
-            placeholderTextColor={colors.secondary}
+            placeholderTextColor={colors.primary}
             value={businessName}
             onChangeText={handleBusinessNameChange}
             onFocus={() => setBusinessNameFocused(true)}
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
     height: colors.height * 0.05,
     width: colors.width * 0.5,
     borderColor: colors.primary,
-    borderWidth:1,
+    borderWidth: 1,
     borderRadius: colors.height * 0.025,
     paddingHorizontal: colors.width * 0.03,
     fontSize: colors.height * 0.015,
