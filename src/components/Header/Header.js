@@ -1,15 +1,24 @@
-import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, ToastAndroid } from 'react-native';
 import colors from '../../utils/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const Header = ({ icon, title, navigation, setSave }) => {
+const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDeletePlan }) => {
   const goBack = () => {
     navigation.goBack();
   };
 
   const handleSave = () => {
+    setEditable(false);
     setSave(true);
+  }
+
+  const handleEdit = () => {
+    setEditable(true);
+  }
+
+  const handleDelete = () => {
+    setDeletePlan(true);
   }
 
   return (
@@ -20,11 +29,26 @@ const Header = ({ icon, title, navigation, setSave }) => {
         </TouchableOpacity>
       )}
       <Text style={styles.headerText}>{title}</Text>
-      {icon && (
-        <TouchableOpacity onPress={handleSave}>
+
+      {
+        navigation ? (
+          editable ?
+            <TouchableOpacity onPress={handleSave}>
+              <Icon name="check" size={24} color={colors.primary} style={styles.icon} />
+            </TouchableOpacity>
+            :
+            <View style={styles.rightContainer}>
+              <TouchableOpacity onPress={handleEdit}>
+                <Icon name="edit" size={24} color={colors.primary} style={styles.icon} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleDelete}>
+                <Icon name="trash" size={24} color={colors.primary} style={styles.icon} />
+              </TouchableOpacity>
+            </View>
+        ) : (
           <Icon name={icon} size={24} color={colors.primary} style={styles.icon} />
-        </TouchableOpacity>
-      )}
+        )
+      }
     </View>
   );
 };
@@ -48,4 +72,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.primary,
   },
+
+  rightContainer:{
+    flexDirection:'row',
+    justifyContent:'center',
+    alignItems:'center'
+  }
 });
