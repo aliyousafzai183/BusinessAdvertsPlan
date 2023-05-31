@@ -23,7 +23,7 @@ const BottomTab = () => {
             iconName = 'cog';
           }
 
-          return <Icon name={iconName} size={size} color={color} />;
+          return <Icon name={iconName} size={colors.height*0.03} color={color} />;
         },
         tabBarStyle: {
           position: 'absolute',
@@ -33,12 +33,17 @@ const BottomTab = () => {
           borderTopColor: colors.primary,
           elevation: 0,
           backgroundColor: 'transparent',
+          bottom: colors.height * 0.017,
+          marginLeft: colors.width * 0.03,
+          marginRight: colors.width * 0.03,
+          height: colors.height * 0.06,
         },
         sceneContainerStyle: {
           backgroundColor: 'transparent',
         },
         tabBarActiveTintColor: colors.linear1,
-        tabBarInactiveTintColor: colors.primary
+        tabBarInactiveTintColor: colors.primary,
+        tabBarShowLabel: false
       })}
     >
       <Tab.Screen

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ToastAndroid, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ToastAndroid, ScrollView, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../../utils/colors';
@@ -26,6 +26,10 @@ const NameScreen = ({ navigation }) => {
 
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+      />
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         <Icon name="user" size={colors.width * 0.2} color={colors.primary} style={styles.icon} />
         {nameFocused && <Text style={styles.title}>Enter Your Name</Text>}
