@@ -12,39 +12,25 @@ const HomeScreen = ({ navigation }) => {
   const [clickRate, setClickRate] = useState(0);
   const [impressionRate, setImpressionRate] = useState(0);
 
-  // Sample data for expenditure, clicks, impressions
-  const expenditureData = [
-    { month: 'Jan', expenditure: 500 },
-    { month: 'Feb', expenditure: 750 },
-    { month: 'Mar', expenditure: 1000 },
-    // Add more data as needed
-  ];
-
-  const clicksData = [
-    { label: 'Impressions', value: 5000, key: 'impressions' },
-    { label: 'Clicks', value: 150, key: 'clicks' },
-    // Add more data as needed
-  ];
-
-  const impressionsData = [
-    { month: 'Jan', impressions: 10000 },
-    { month: 'Feb', impressions: 15000 },
-    { month: 'Mar', impressions: 20000 },
+  const data = [
+    { name: 'Jan', expenditure: 500, clicks: 200, impressions: 1000 },
+    { name: 'Feb', expenditure: 750, clicks: 300, impressions: 1500 },
+    { name: 'Mar', expenditure: 1000, clicks: 400, impressions: 2000 },
     // Add more data as needed
   ];
 
   const calculateTotalExpenditure = () => {
-    const total = expenditureData.reduce((sum, data) => sum + data.expenditure, 0);
+    const total = data.reduce((sum, item) => sum + item.expenditure, 0);
     setTotalExpenditure(total);
   };
 
   const calculateTotalClicks = () => {
-    const total = clicksData.reduce((sum, data) => sum + data.value, 0);
+    const total = data.reduce((sum, item) => sum + item.clicks, 0);
     setTotalClicks(total);
   };
 
   const calculateTotalImpressions = () => {
-    const total = impressionsData.reduce((sum, data) => sum + data.impressions, 0);
+    const total = data.reduce((sum, item) => sum + item.impressions, 0);
     setTotalImpressions(total);
   };
 
@@ -76,9 +62,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-
-        <Header />
-
+        <Header icon="bar-chart" title="Statistics"/>
         <View style={styles.cardContainer}>
           <HomeCard title="Total Expenditure" value={`$ ${totalExpenditure}`} />
           <HomeCard title="Total Clicks" value={totalClicks} />
@@ -106,6 +90,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: colors.width * 0.9,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
 });

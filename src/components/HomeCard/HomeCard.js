@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import colors from '../../utils/colors';
 
-const HomeCard = ({title, value}) => {
+const HomeCard = ({ title, value }) => {
     return (
         <View style={styles.card}>
             <Text style={styles.cardTitle}>{title}</Text>
@@ -22,8 +22,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: colors.height * 0.02,
         height: colors.height * 0.15,
-        justifyContent:'center',
-        alignItems:'center'
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        shadowColor: colors.black,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 4,
+        elevation: 4,
     },
     cardTitle: {
         fontSize: 16,

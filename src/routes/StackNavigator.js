@@ -16,7 +16,11 @@ const Stack = createNativeStackNavigator();
 const StackNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown:false
+                }}
+            >
 
                 <Stack.Screen
                     name={RouteName.SPLASH_SCREEN}
