@@ -5,12 +5,20 @@ import colors from '../../utils/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Header } from '../../components/index';
 import RouteName from '../../routes/RouteName';
+import { deleteAllData } from '../../database/crud';
 
 const SettingScreen = ({ navigation }) => {
 
   const handleReset = () => {
+    deleteAllData()
+  .then(() => {
     ToastAndroid.show("Data cleared!", ToastAndroid.SHORT);
     navigation.navigate(RouteName.HOME_SCREEN);
+  })
+  .catch((error) => {
+    ToastAndroid.show("Data not found!", ToastAndroid.SHORT);
+  });
+
   }
 
   return (

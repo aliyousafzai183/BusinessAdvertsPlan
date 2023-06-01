@@ -1,30 +1,50 @@
-import React from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../utils/colors';
 import { Header, ListCard } from '../../components/index';
+import { readData } from '../../database/crud';
+import { useFocusEffect } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon library you want to use
+import RouteName from '../../routes/RouteName';
 
 const PlanListScreen = ({ navigation }) => {
-  const data = [
-    { id: 1, name: 'Plan 1', expenditure: 500, clicks: 200, impressions: 1000 },
-    { id: 2, name: 'Plan 2', expenditure: 750, clicks: 300, impressions: 1500 },
-    { id: 3, name: 'Plan 3', expenditure: 1000, clicks: 400, impressions: 2000 },
-    { id: 4, name: 'Plan 4', expenditure: 1000, clicks: 400, impressions: 2000 },
-    { id: 5, name: 'Plan 5', expenditure: 1000, clicks: 400, impressions: 2000 },
-    { id: 6, name: 'Plan 6', expenditure: 1000, clicks: 400, impressions: 2000 },
-    { id: 7, name: 'Plan 7', expenditure: 1000, clicks: 400, impressions: 2000 },
-    // Add more data as needed
-  ];
+  const [data, setData] = useState([]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const data = await readData();
+          setData(data);
+        } catch (error) {
+          console.log('Error retrieving data:', error);
+        }
+      };
+
+      fetchData();
+    }, [])
+  );
 
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Header icon="list" title="All Ad Plans"/>
+        <Header icon="list" title="All Ad Plans" />
         <View style={styles.cardsContainer}>
-          {data.map((plan, index) => (
-            <ListCard plan={plan} index={index} key={plan.id} navigation={navigation} />
-          ))}
+          {data.length === 0 ? (
+            <TouchableOpacity
+              style={styles.noDataContainer}
+              onPress={()=> navigation.navigate(RouteName.VIEW_PLAN_SCREEN)}
+            >
+              <Icon name="exclamation-circle" size={30} color={colors.primary} />
+              <Text style={styles.noDataText}>No data found, Add Now!</Text>
 
+            </TouchableOpacity>
+          ) : (
+            data.map((plan, index) => (
+              <ListCard plan={plan} index={index} key={plan.id} navigation={navigation} />
+            ))
+          )}
         </View>
       </ScrollView>
     </LinearGradient>
@@ -45,5 +65,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
+  },
+  noDataContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: colors.height * 0.3,
+  },
+  noDataText: {
+    color: colors.primary,
+    fontSize: 16,
+    marginTop: 10,
   },
 });

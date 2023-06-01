@@ -4,6 +4,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../utils/colors';
 import { Header, HomeCard } from '../../components/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { readData } from '../../database/crud';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }) => {
   const [totalExpenditure, setTotalExpenditure] = useState(0);
@@ -14,19 +16,37 @@ const HomeScreen = ({ navigation }) => {
   const [impressionRate, setImpressionRate] = useState(0);
   const [name, setName] = useState('');
   const [businessName, setBusinessName] = useState('');
-
-
-  const data = [
-    { name: 'Jan', expenditure: 500, clicks: 200, impressions: 1000 },
-    { name: 'Feb', expenditure: 750, clicks: 300, impressions: 1500 },
-    { name: 'Mar', expenditure: 1000, clicks: 400, impressions: 2000 },
-    // Add more data as needed
-  ];
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchDataFromStorage();
-  }, []);
+    calculateTotalExpenditure();
+    calculateTotalClicks();
+    calculateTotalImpressions();
+  }, [data]);
 
+  useEffect(() => {
+    calculateClickThroughRate();
+    calculateClickRate();
+    calculateImpressionRate();
+  }, [totalExpenditure]);
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        await fetchDataFromStorage();
+        try {
+          const data = await readData();
+          setData(data);
+        } catch (error) {
+          console.log('Error retrieving data:', error);
+        }
+      };
+  
+      fetchData();
+    }, [])
+  );
+  
+  
   const fetchDataFromStorage = async () => {
     try {
       const storedName = await AsyncStorage.getItem('name');
@@ -67,16 +87,6 @@ const HomeScreen = ({ navigation }) => {
     const rate = totalImpressions !== 0 ? totalExpenditure / totalImpressions : 0;
     setImpressionRate(rate);
   };
-
-  // Call the calculation functions when the component mounts
-  useEffect(() => {
-    calculateTotalExpenditure();
-    calculateTotalClicks();
-    calculateTotalImpressions();
-    calculateClickThroughRate();
-    calculateClickRate();
-    calculateImpressionRate();
-  }, []);
 
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>

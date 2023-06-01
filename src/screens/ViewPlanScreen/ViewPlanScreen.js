@@ -5,14 +5,15 @@ import colors from '../../utils/colors';
 import { Header } from '../../components/index';
 import { useRoute } from '@react-navigation/native';
 import RouteName from '../../routes/RouteName';
+import { updateData, readDataById, createData, deleteData } from '../../database/crud';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ViewPlanScreen = ({ navigation }) => {
   const route = useRoute();
   const { id } = route.params ?? {};
 
   const [save, setSave] = useState(false);
-  const [saveNewPlan, setSaveNewPlan] = useState(false);
-  const [editable, setEditable] = useState(id ? false: true);
+  const [editable, setEditable] = useState(id ? false : true);
   const [deletePlan, setDeletePlan] = useState(false);
   const [planName, setPlanName] = useState('');
   const [expenditure, setExpenditure] = useState('');
@@ -20,45 +21,58 @@ const ViewPlanScreen = ({ navigation }) => {
   const [impressions, setImpressions] = useState('');
   const [planId, setPlanId] = useState('');
 
-  const data = [
-    { id: 1, name: 'Plan 1', expenditure: 500, clicks: 200, impressions: 1000 },
-    { id: 2, name: 'Plan 2', expenditure: 750, clicks: 300, impressions: 1500 },
-    { id: 3, name: 'Plan 3', expenditure: 1000, clicks: 400, impressions: 2000 },
-    { id: 4, name: 'Plan 4', expenditure: 1000, clicks: 400, impressions: 2000 },
-    { id: 5, name: 'Plan 5', expenditure: 1000, clicks: 400, impressions: 2000 },
-    { id: 6, name: 'Plan 6', expenditure: 1000, clicks: 400, impressions: 2000 },
-    { id: 7, name: 'Plan 7', expenditure: 1000, clicks: 400, impressions: 2000 },
-  ];
+  useFocusEffect(
+    React.useCallback(() => {
+      if (id) {
+        // Read the plan data from the database
+        readDataById(id)
+          .then((plan) => {
+            if (plan) {
+              setPlanName(plan.name);
+              setExpenditure(plan.expenditure.toString());
+              setClicks(plan.clicks.toString());
+              setImpressions(plan.impressions.toString());
+              setPlanId(plan.id);
+            }
+          })
+          .catch((error) => {
+            console.log('Error reading plan data:', error);
+          });
 
-  useEffect(() => {
-    const plan = data.find((item) => item.id === id);
-    if (plan) {
-      setPlanName(plan.name);
-      setExpenditure(plan.expenditure.toString());
-      setClicks(plan.clicks.toString());
-      setImpressions(plan.impressions.toString());
-      setPlanId(plan.id.toString());
-    }
+      }
 
-    if (deletePlan) {
-      // handleDeletePlan
-      ToastAndroid.show('Plan Deleted', ToastAndroid.SHORT);
-      navigation.navigate(RouteName.PLAN_LIST_SCREEN);
-    }
+      if (deletePlan) {
+        // Delete the plan from the database
+        deleteData(planId)
+          .then(() => {
+            navigation.navigate(RouteName.PLAN_LIST_SCREEN);
+          })
+          .catch((error) => {
+            console.log('Error deleting data:', error);
+          });
+      }
 
-    if (save) {
-      handleSave();
-    }
+      if (save) {
+        handleSave();
+      }
+    }, [id, deletePlan, save])
+  );
 
-  }, [id, deletePlan]);
 
   const handleSave = () => {
-    ToastAndroid.show("Plan Saved", ToastAndroid.SHORT);
-    // navigation.navigate(RouteName.PLAN_LIST_SCREEN);
+    updateData(planId, planName, parseInt(expenditure), parseInt(clicks), parseInt(impressions))
+      .then(() => {
+        ToastAndroid.show('Plan Updated', ToastAndroid.SHORT);
+        navigation.navigate(RouteName.PLAN_LIST_SCREEN);
+      })
+      .catch((error) => {
+        console.log('Error updating plan:', error);
+      });
   };
+  
 
   const handleAdd = () => {
-    ToastAndroid.show("Plan Saved", ToastAndroid.SHORT);
+    createData(planName, expenditure, clicks, impressions);
     navigation.navigate(RouteName.PLAN_LIST_SCREEN);
   };
 
@@ -68,10 +82,18 @@ const ViewPlanScreen = ({ navigation }) => {
 
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
-      <Header title={id ? "Edit Plan" : "Add Plan"} navigation={navigation} setSave={setSave} save={save} editable={editable} setEditable={setEditable} setDeletePlan={setDeletePlan} isNew={id ? false : true} 
-       setSaveNewPlan={setSaveNewPlan} />
+      <Header
+        title={id ? 'Edit Plan' : 'Add Plan'}
+        navigation={navigation}
+        setSave={setSave}
+        save={save}
+        editable={editable}
+        setEditable={setEditable}
+        setDeletePlan={setDeletePlan}
+        isNew={id ? false : true}
+        handleAdd={handleAdd}
+      />
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-
         <View style={styles.inputContainer}>
           {planName ? <Text style={styles.label}>Enter plan name</Text> : null}
           <TextInput
@@ -131,7 +153,6 @@ const ViewPlanScreen = ({ navigation }) => {
             editable={editable}
           />
         </View>
-
       </ScrollView>
     </LinearGradient>
   );
