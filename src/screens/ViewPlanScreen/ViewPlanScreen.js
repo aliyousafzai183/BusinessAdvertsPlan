@@ -11,14 +11,14 @@ const ViewPlanScreen = ({ navigation }) => {
   const { id } = route.params ?? {};
 
   const [save, setSave] = useState(false);
-  const [editable, setEditable] = useState(false);
+  const [saveNewPlan, setSaveNewPlan] = useState(false);
+  const [editable, setEditable] = useState(id ? false: true);
   const [deletePlan, setDeletePlan] = useState(false);
   const [planName, setPlanName] = useState('');
   const [expenditure, setExpenditure] = useState('');
   const [clicks, setClicks] = useState('');
   const [impressions, setImpressions] = useState('');
   const [planId, setPlanId] = useState('');
-  const [addPlan, setAddPlan] = useState(false);
 
   const data = [
     { id: 1, name: 'Plan 1', expenditure: 500, clicks: 200, impressions: 1000 },
@@ -68,7 +68,8 @@ const ViewPlanScreen = ({ navigation }) => {
 
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
-      <Header title={id ? "Edit Plan" : "Add Plan"} navigation={navigation} setSave={setSave} save={save} editable={editable} setEditable={setEditable} setDeletePlan={setDeletePlan} isNew={id ? false : true} setAddPlan={setAddPlan}/>
+      <Header title={id ? "Edit Plan" : "Add Plan"} navigation={navigation} setSave={setSave} save={save} editable={editable} setEditable={setEditable} setDeletePlan={setDeletePlan} isNew={id ? false : true} 
+       setSaveNewPlan={setSaveNewPlan} />
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
 
         <View style={styles.inputContainer}>
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     color: colors.linear2,
     marginBottom: 5,
     alignSelf: 'center',
-    fontWeight:'bold'
+    fontWeight: 'bold'
   },
   textInput: {
     height: colors.height * 0.05,

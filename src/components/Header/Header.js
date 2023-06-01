@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import RouteName from '../../routes/RouteName';
 import { useNavigation } from '@react-navigation/native';
 
-const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDeletePlan, isNew, setAddPlan }) => {
+const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDeletePlan, isNew, setSaveNewPlan}) => {
   const stack = useNavigation();
   const goBack = () => {
     navigation.goBack();
@@ -35,8 +35,12 @@ const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDe
   };
 
   const handleAddPlan = () => {
-    setAddPlan(true);
     stack.navigate(RouteName.VIEW_PLAN_SCREEN);
+  };
+
+  const handleSaveNewPlan = () => {
+    setSaveNewPlan(true);
+    stack.navigate(RouteName.PLAN_LIST_SCREEN);
   };
 
   return (
@@ -51,7 +55,7 @@ const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDe
       {
         navigation ? (
           isNew ? (
-            <TouchableOpacity onPress={handleAddPlan}>
+            <TouchableOpacity onPress={handleSaveNewPlan}>
               <Icon name="plus-square" size={24} color={colors.primary} style={styles.icon} />
             </TouchableOpacity>
           ) : (
