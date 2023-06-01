@@ -5,7 +5,7 @@ import RouteName from './RouteName';
 import BottomTab from './BottomTab';
 import {
     AdBudgetPlanner, ProfileScreen,
-    AddPlanScreen, AdServiceScreen,
+    ResultScreen, AdServiceScreen,
     ViewPlanScreen, BusinessNameScreen,
     ContinueScreen, NameScreen,
     SplashScreen
@@ -78,8 +78,8 @@ const StackNavigator = () => {
                 />
 
                 <Stack.Screen
-                    name={RouteName.ADD_PLAN_SCREEN}
-                    component={AddPlanScreen}
+                    name={RouteName.RESULT_SCREEN}
+                    component={ResultScreen}
                 />
 
                 <Stack.Screen

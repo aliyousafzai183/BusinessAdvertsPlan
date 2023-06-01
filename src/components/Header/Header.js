@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     paddingTop: colors.height * 0.07,
     justifyContent: 'space-between',
     width: colors.width * 0.9,
+    alignSelf:'center'
   },
   icon: {
     marginRight: 10,

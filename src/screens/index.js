@@ -1,6 +1,6 @@
 export * from './AdBudgetPlanner';
 export * from './AdServiceScreen';
-export * from './AddPlanScreen';
+export * from './ResultScreen';
 export * from './HomeScreen';
 export * from './PlanListScreen';
 export * from './ViewPlanScreen';
