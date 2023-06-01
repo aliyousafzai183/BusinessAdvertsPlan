@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../utils/colors';
 import { Header, HomeCard } from '../../components/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({ navigation }) => {
   const [totalExpenditure, setTotalExpenditure] = useState(0);
@@ -11,6 +12,9 @@ const HomeScreen = ({ navigation }) => {
   const [clickThroughRate, setClickThroughRate] = useState(0);
   const [clickRate, setClickRate] = useState(0);
   const [impressionRate, setImpressionRate] = useState(0);
+  const [name, setName] = useState('');
+  const [businessName, setBusinessName] = useState('');
+
 
   const data = [
     { name: 'Jan', expenditure: 500, clicks: 200, impressions: 1000 },
@@ -18,6 +22,21 @@ const HomeScreen = ({ navigation }) => {
     { name: 'Mar', expenditure: 1000, clicks: 400, impressions: 2000 },
     // Add more data as needed
   ];
+
+  useEffect(() => {
+    fetchDataFromStorage();
+  }, []);
+
+  const fetchDataFromStorage = async () => {
+    try {
+      const storedName = await AsyncStorage.getItem('name');
+      const storedBusinessName = await AsyncStorage.getItem('businessName');
+      setName(storedName);
+      setBusinessName(storedBusinessName);
+    } catch (error) {
+      console.log('Error fetching data from AsyncStorage:', error);
+    }
+  };
 
   const calculateTotalExpenditure = () => {
     const total = data.reduce((sum, item) => sum + item.expenditure, 0);
@@ -62,7 +81,8 @@ const HomeScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Header icon="bar-chart" title="Ads Statistics"/>
+        <Header icon="bar-chart" title={businessName + " Statistics"} />
+        <Text style={styles.greetingsText}>{"Hi " + name + " !"}</Text>
         <View style={styles.cardContainer}>
           <HomeCard title="Total Expenditure" value={`$ ${totalExpenditure}`} />
           <HomeCard title="Total Clicks" value={totalClicks} />
@@ -92,4 +112,13 @@ const styles = StyleSheet.create({
     width: colors.width * 0.9,
     flexWrap: 'wrap',
   },
+
+  greetingsText: {
+    fontSize: 18,
+    color: colors.linear2,
+    alignSelf: 'flex-start',
+    marginLeft: colors.width * 0.07,
+    marginBottom: colors.height * 0.01,
+    fontWeight: 'bold'
+  }
 });

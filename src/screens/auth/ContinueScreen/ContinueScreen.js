@@ -6,11 +6,22 @@ import RouteName from '../../../routes/RouteName';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon1 from 'react-native-vector-icons/AntDesign';
 import { useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ContinueScreen = ({ navigation }) => {
   const route = useRoute();
   const { name, businessName } = route.params;
   const [isAgreed, setIsAgreed] = useState(false);
+
+  const saveDataToStorage = async () => {
+    try {
+      await AsyncStorage.setItem('name', name);
+      await AsyncStorage.setItem('businessName', businessName);
+      await AsyncStorage.setItem('nameProvided', 'true');
+    } catch (error) {
+      console.log('Error saving data to AsyncStorage:', error);
+    }
+  };
 
   const handleAgreementToggle = () => {
     setIsAgreed(!isAgreed);
@@ -18,6 +29,7 @@ const ContinueScreen = ({ navigation }) => {
 
   const handleNext = () => {
     if (isAgreed) {
+      saveDataToStorage();
       navigation.replace(RouteName.MAIN_HOME_SCREEN);
     } else {
       // Show error message or toast indicating that the user needs to agree to the terms

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ToastAndroid, ScrollView, StatusBar } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../../utils/colors';
 import RouteName from '../../../routes/RouteName';
@@ -18,8 +17,6 @@ const NameScreen = ({ navigation }) => {
     if (name.length < 3) {
       ToastAndroid.show('Name should be at least 3 characters', ToastAndroid.SHORT);
     } else {
-      await AsyncStorage.setItem('nameProvided', 'true');
-
       navigation.navigate(RouteName.BUSINESS_NAME_SCREEN, { name: name });
     }
   };
