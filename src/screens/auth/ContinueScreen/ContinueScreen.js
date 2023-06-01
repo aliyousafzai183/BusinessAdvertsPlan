@@ -41,11 +41,11 @@ const ContinueScreen = ({ navigation }) => {
   };
 
   const openTermsAndConditions = () => {
-    Linking.openURL('https://oblador.github.io/react-native-vector-icons/');
+    Linking.openURL('https://www.privacypolicies.com/live/736b27b3-dab6-4876-8bc4-b9b106c77d86');
   };
 
   const openPrivacyPolicy = () => {
-    Linking.openURL('https://oblador.github.io/react-native-vector-icons/');
+    Linking.openURL('https://www.privacypolicies.com/live/27db83f3-e746-460d-a94f-f1688b91889c');
   };
 
   return (

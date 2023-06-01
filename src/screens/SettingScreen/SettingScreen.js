@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, ToastAndroid, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, ToastAndroid, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../utils/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,21 +9,42 @@ import { deleteAllData } from '../../database/crud';
 
 const SettingScreen = ({ navigation }) => {
 
-  const handleReset = () => {
+  const handleDelete = () => {
     deleteAllData()
-  .then(() => {
-    ToastAndroid.show("Data cleared!", ToastAndroid.SHORT);
-    navigation.navigate(RouteName.HOME_SCREEN);
-  })
-  .catch((error) => {
-    ToastAndroid.show("Data not found!", ToastAndroid.SHORT);
-  });
+      .then(() => {
+        ToastAndroid.show("Data cleared!", ToastAndroid.SHORT);
+        navigation.navigate(RouteName.HOME_SCREEN);
+      })
+      .catch((error) => {
+        ToastAndroid.show("Data not found!", ToastAndroid.SHORT);
+      });
 
+  }
+
+  const handleReset = () => {
+    Alert.alert(
+      'Confirm Deletion',
+      'Are you sure you want to delete all plans?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            handleDelete();
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   }
 
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
-      <Header title="Settings" icon="list"/>
+      <Header title="Settings" icon="list" />
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate(RouteName.AD_BUDGET_PLAN_SCREEN)}>
           <Text style={styles.buttonText}>Ad Budget Calculator</Text>

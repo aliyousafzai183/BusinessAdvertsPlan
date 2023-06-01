@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, ToastAndroid, Modal } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Alert, Modal } from 'react-native';
 import colors from '../../utils/colors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import RouteName from '../../routes/RouteName';
 import { useNavigation } from '@react-navigation/native';
 
-const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDeletePlan, isNew, handleAdd}) => {
+const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDeletePlan, isNew, handleAdd, handleDeleteAllPlans }) => {
   const stack = useNavigation();
   const goBack = () => {
     navigation.goBack();
@@ -24,14 +24,33 @@ const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDe
     setDeletePlan(true);
   };
 
+
   const [showModal, setShowModal] = useState(false);
 
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
-  const handleDeleteAllPlans = () => {
-    setShowModal(!showModal);
+  const handleDeleteAllPlan = () => {
+    Alert.alert(
+      'Confirm Deletion',
+      'Are you sure you want to delete all plans?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            handleDeleteAllPlans();
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+    setShowModal(false);
   };
 
   const handleAddPlan = () => {
@@ -88,7 +107,7 @@ const Header = ({ icon, title, navigation, setSave, editable, setEditable, setDe
             <TouchableOpacity style={styles.modalItem} onPress={handleAddPlan}>
               <Text style={styles.modalItemText}>Add New Plan</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.modalItem1} onPress={handleDeleteAllPlans}>
+            <TouchableOpacity style={styles.modalItem1} onPress={handleDeleteAllPlan}>
               <Text style={styles.modalItemText}>Delete All Plans</Text>
             </TouchableOpacity>
           </View>
@@ -108,7 +127,7 @@ const styles = StyleSheet.create({
     paddingTop: colors.height * 0.07,
     justifyContent: 'space-between',
     width: colors.width * 0.9,
-    alignSelf:'center'
+    alignSelf: 'center'
   },
   icon: {
     marginRight: 10,

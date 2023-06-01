@@ -69,7 +69,7 @@ const readData = () => {
         },
         (_, error) => {
           console.log('Error retrieving data:', error);
-          ToastAndroid.show('Error retrieving data', ToastAndroid.SHORT);
+          // ToastAndroid.show('No data found!', ToastAndroid.SHORT);
         }
       );
     });

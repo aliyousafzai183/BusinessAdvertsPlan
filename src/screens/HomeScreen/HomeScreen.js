@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, BackHandler, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../utils/colors';
 import { Header, HomeCard } from '../../components/index';
@@ -43,6 +43,32 @@ const HomeScreen = ({ navigation }) => {
       };
   
       fetchData();
+
+      const backAction = () => {
+        Alert.alert(
+          'Exit App',
+          'Are you sure you want to exit?',
+          [
+            {
+              text: 'Cancel',
+              style: 'cancel',
+            },
+            {
+              text: 'Exit',
+              style: 'destructive',
+              onPress: () => {
+                BackHandler.exitApp();
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+        return true;
+      };
+
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+      return () => backHandler.remove();
     }, [])
   );
   
@@ -91,8 +117,8 @@ const HomeScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={[colors.linear1, colors.linear2]} style={styles.gradient}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Header icon="bar-chart" title={businessName + " Statistics"} />
-        <Text style={styles.greetingsText}>{"Hi " + name + " !"}</Text>
+        <Header icon="bar-chart" title={businessName? businessName : '' + " Statistics"} />
+        <Text style={styles.greetingsText}>{"Hi " + (name ? name : '') + " !"}</Text>
         <View style={styles.cardContainer}>
           <HomeCard title="Total Expenditure" value={`$ ${totalExpenditure}`} />
           <HomeCard title="Total Clicks" value={totalClicks} />

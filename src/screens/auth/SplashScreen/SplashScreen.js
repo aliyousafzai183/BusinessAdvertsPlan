@@ -23,7 +23,7 @@ const SplashScreen = ({ navigation }) => {
     const nameProvided = await AsyncStorage.getItem('nameProvided');
 
     if (nameProvided) {
-      navigation.navigate(RouteName.MAIN_HOME_SCREEN);
+      navigation.replace(RouteName.MAIN_HOME_SCREEN);
     }else{
       navigation.replace(RouteName.NAME_SCREEN);
     }
