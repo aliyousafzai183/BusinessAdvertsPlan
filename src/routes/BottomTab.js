@@ -27,16 +27,18 @@ const BottomTab = () => {
         },
         tabBarStyle: {
           position: 'absolute',
-          borderWidth: 1,
+          // borderWidth: 1,s
           borderColor: colors.primary,
-          borderRadius: 20,
+          borderRadius: 30,
           borderTopColor: colors.primary,
           elevation: 0,
-          backgroundColor: 'transparent',
-          bottom: colors.height * 0.017,
-          marginLeft: colors.width * 0.03,
-          marginRight: colors.width * 0.03,
-          height: colors.height * 0.06,
+          backgroundColor: colors.linear2,
+          // bottom: colors.height * 0.02,
+          // marginLeft: colors.width * 0.03,
+          // marginRight: colors.width * 0.03,
+          // height: colors.height * 0.07,
+          justifyContent:'center',
+          alignItems:'center'
         },
         sceneContainerStyle: {
           backgroundColor: 'transparent',
