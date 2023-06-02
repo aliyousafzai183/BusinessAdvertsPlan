@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput, Keyboard, BackHandler, ToastAndroid } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView, TextInput, Keyboard, BackHandler } from 'react-native';
+import Toast from 'react-native-toast-message';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../utils/colors';
 import { Header2 } from '../../components/index';
@@ -29,7 +30,11 @@ const AdBudgetCalculatorScreen = ({ navigation }) => {
 
       navigation.navigate(RouteName.RESULT_SCREEN, { data });
     } else {
-      ToastAndroid.show("Fill all the details first", ToastAndroid.SHORT);
+      Toast.show({
+        type: 'error',
+        text1: 'Error creating data',
+        visibilityTime: 2000,
+      });
     }
   };
 

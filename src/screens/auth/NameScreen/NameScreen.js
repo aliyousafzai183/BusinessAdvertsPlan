@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ToastAndroid, ScrollView, StatusBar } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../../utils/colors';
 import RouteName from '../../../routes/RouteName';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Toast from 'react-native-toast-message';
 
 const NameScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -15,8 +16,12 @@ const NameScreen = ({ navigation }) => {
 
   const handleSubmit = async () => {
     if (name.length < 3) {
-      ToastAndroid.show('Name should be at least 3 characters', ToastAndroid.SHORT);
-    } else {
+      Toast.show({
+        type: 'error',
+        text1: 'Name must be at least 3 characters',
+        visibilityTime: 2000,
+      });
+        } else {
       navigation.navigate(RouteName.BUSINESS_NAME_SCREEN, { name: name });
     }
   };

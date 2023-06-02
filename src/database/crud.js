@@ -1,5 +1,5 @@
 import SQLite from 'react-native-sqlite-storage';
-import { ToastAndroid } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 const db = SQLite.openDatabase({ name: 'mydb.db', location: 'default' });
 
@@ -14,17 +14,29 @@ const createData = (name, expenditure, clicks, impressions) => {
           [name, expenditure, clicks, impressions],
           (_, result) => {
             console.log('Data created successfully');
-            ToastAndroid.show('Data created successfully', ToastAndroid.SHORT);
+            Toast.show({
+              type: 'success',
+              text1: 'Data created successfully',
+              visibilityTime: 2000,
+            });
           },
           (_, error) => {
             console.log('Error creating data:', error);
-            ToastAndroid.show('Error creating data', ToastAndroid.SHORT);
+            Toast.show({
+              type: 'error',
+              text1: 'Error creating data',
+              visibilityTime: 2000,
+            });
           }
         );
       },
       (_, error) => {
         console.log('Error creating table:', error);
-        ToastAndroid.show('Error creating table', ToastAndroid.SHORT);
+        Toast.show({
+          type: 'error',
+          text1: 'Error creating table',
+          visibilityTime: 2000,
+        });
       }
     );
   });
@@ -48,7 +60,11 @@ const readDataById = (id) => {
         },
         (_, error) => {
           console.log('Error retrieving data:', error);
-          ToastAndroid.show('Error retrieving data', ToastAndroid.SHORT);
+          Toast.show({
+            type: 'error',
+            text1: 'Error retrieving data',
+            visibilityTime: 2000,
+          });
           reject(error);
         }
       );
@@ -69,7 +85,11 @@ const readData = () => {
         },
         (_, error) => {
           console.log('Error retrieving data:', error);
-          // ToastAndroid.show('No data found!', ToastAndroid.SHORT);
+          // Toast.show({
+          //   type: 'info',
+          //   text1: 'No data found!',
+          //   visibilityTime: 2000,
+          // });
         }
       );
     });
@@ -84,19 +104,26 @@ const updateData = (id, name, expenditure, clicks, impressions) => {
         [name, expenditure, clicks, impressions, id],
         (_, result) => {
           console.log('Data updated successfully');
-          ToastAndroid.show('Data updated successfully', ToastAndroid.SHORT);
+          Toast.show({
+            type: 'success',
+            text1: 'Data updated successfully',
+            visibilityTime: 2000,
+          });
           resolve();
         },
         (_, error) => {
           console.log('Error updating data:', error);
-          ToastAndroid.show('Error updating data', ToastAndroid.SHORT);
+          Toast.show({
+            type: 'error',
+            text1: 'Error updating data',
+            visibilityTime: 2000,
+          });
           reject(error);
         }
       );
     });
   });
 };
-
 
 const deleteData = (id) => {
   return new Promise((resolve, reject) => {
@@ -106,12 +133,20 @@ const deleteData = (id) => {
         [id],
         (_, result) => {
           console.log('Data deleted successfully');
-          ToastAndroid.show('Data deleted successfully', ToastAndroid.SHORT);
+          Toast.show({
+            type: 'success',
+            text1: 'Data deleted successfully',
+            visibilityTime: 2000,
+          });
           resolve();
         },
         (_, error) => {
           console.log('Error deleting data:', error);
-          ToastAndroid.show('Error deleting data', ToastAndroid.SHORT);
+          Toast.show({
+            type: 'error',
+            text1: 'Error deleting data',
+            visibilityTime: 2000,
+          });
           reject(error);
         }
       );
@@ -127,19 +162,25 @@ const deleteAllData = () => {
         [],
         (_, result) => {
           console.log('All data deleted successfully');
-          ToastAndroid.show('All data deleted successfully', ToastAndroid.SHORT);
+          Toast.show({
+            type: 'success',
+            text1: 'All data deleted successfully',
+            visibilityTime: 2000,
+          });
           resolve();
         },
         (_, error) => {
           console.log('Error deleting data:', error);
-          ToastAndroid.show('Error deleting data', ToastAndroid.SHORT);
+          Toast.show({
+            type: 'error',
+            text1: 'Error deleting data',
+            visibilityTime: 2000,
+          });
           reject(error);
         }
       );
     });
   });
 };
-
-
 
 export { createData, readData, updateData, deleteData, readDataById, deleteAllData };

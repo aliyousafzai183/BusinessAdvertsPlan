@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, ToastAndroid, ScrollView, TextInput, Keyboard } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, TextInput, Keyboard } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../utils/colors';
 import { Header } from '../../components/index';
@@ -7,6 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import RouteName from '../../routes/RouteName';
 import { updateData, readDataById, createData, deleteData } from '../../database/crud';
 import { useFocusEffect } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const ViewPlanScreen = ({ navigation }) => {
   const route = useRoute();
@@ -62,14 +63,22 @@ const ViewPlanScreen = ({ navigation }) => {
   const handleSave = () => {
     updateData(planId, planName, parseInt(expenditure), parseInt(clicks), parseInt(impressions))
       .then(() => {
-        ToastAndroid.show('Plan Updated', ToastAndroid.SHORT);
+        Toast.show({
+          type: 'success',
+          text1: 'Plan Updated',
+          visibilityTime: 2000,
+        });
         navigation.navigate(RouteName.PLAN_LIST_SCREEN);
       })
       .catch((error) => {
-        console.log('Error updating plan:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error updating plan:',
+          visibilityTime: 2000,
+        });
       });
   };
-  
+
 
   const handleAdd = () => {
     createData(planName, expenditure, clicks, impressions);

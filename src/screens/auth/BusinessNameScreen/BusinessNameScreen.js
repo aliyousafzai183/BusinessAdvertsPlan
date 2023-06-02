@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, ToastAndroid, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../../utils/colors';
 import RouteName from '../../../routes/RouteName';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useRoute } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 
 const BusinessNameScreen = ({ navigation }) => {
   const route = useRoute();
@@ -18,7 +19,11 @@ const BusinessNameScreen = ({ navigation }) => {
 
   const handleSubmit = () => {
     if (businessName.length < 3) {
-      ToastAndroid.show('Business name should be at least 3 characters', ToastAndroid.SHORT);
+      Toast.show({
+        type: 'error',
+        text1: 'Provide valid business name',
+        visibilityTime: 2000,
+      });
     } else {
       navigation.navigate(RouteName.CONTINUE_SCREEN, { businessName: businessName, name: name });
     }

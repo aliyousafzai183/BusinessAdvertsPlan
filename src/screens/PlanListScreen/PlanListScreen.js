@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, ToastAndroid } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import colors from '../../utils/colors';
 import { Header, ListCard } from '../../components/index';
@@ -7,6 +7,7 @@ import { readData, deleteAllData} from '../../database/crud';
 import { useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import the icon library you want to use
 import RouteName from '../../routes/RouteName';
+import Toast from 'react-native-toast-message';
 
 const PlanListScreen = ({ navigation }) => {
   const [data, setData] = useState([]);
@@ -30,10 +31,18 @@ const PlanListScreen = ({ navigation }) => {
     deleteAllData()
       .then(() => {
         fetchData();
-        ToastAndroid.show("Data cleared!", ToastAndroid.SHORT);
+        Toast.show({
+          type: 'success',
+          text1: 'Data cleared',
+          visibilityTime: 2000,
+        });
       })
       .catch((error) => {
-        ToastAndroid.show("Data not found!", ToastAndroid.SHORT);
+        Toast.show({
+          type: 'success',
+          text1: 'Data not found!',
+          visibilityTime: 2000,
+        });
       });
   };
 

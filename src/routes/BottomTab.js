@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import RouteName from './RouteName';
 import { HomeScreen, PlanListScreen, SettingScreen } from '../screens';
-import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
 import colors from '../utils/colors';
